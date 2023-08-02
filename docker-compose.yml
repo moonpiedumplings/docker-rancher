@@ -1,0 +1,18 @@
+
+
+services:
+  rancher-manager:
+    #build: .
+    privileged: true
+    image: rancher/rancher
+    ports:
+      - "81:80"
+      - "444:443"
+    volumes: 
+      - "./rancher:/var/lib/rancher"
+
+  # rancher-db:
+  #   image: mariadb
+  #   environment:
+  #     MARIADB_ROOT_PASSWORD: example
+
