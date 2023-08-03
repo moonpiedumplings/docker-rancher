@@ -9,7 +9,12 @@ services:
       - "81:80"
       - "444:443"
     volumes: 
+      # attempting to have persistency
       - "./rancher:/var/lib/rancher"
+      # Generate Openssl certs for use with rancher.
+      #- "/<CERT_DIRECTORY>/<FULL_CHAIN.pem>:/etc/rancher/ssl/cert.pem"
+      #- "/<CERT_DIRECTORY>/<PRIVATE_KEY.pem>:/etc/rancher/ssl/key.pem"
+      #- "/<CERT_DIRECTORY>/<CA_CERTS.pem>:/etc/rancher/ssl/cacerts.pem"
 
   # rancher-db:
   #   image: mariadb
