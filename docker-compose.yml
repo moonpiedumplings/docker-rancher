@@ -4,7 +4,7 @@ services:
   rancher-manager:
     #build: .
     privileged: true
-    image: docker.io/rancher/rancher:latest
+    image: docker.io/rancher/rancher:2.5
     ports:
       - "81:80"
       - "444:443"
@@ -12,7 +12,7 @@ services:
       # attempting to have persistency
       - "./rancher:/var/lib/rancher"
       # Generate Openssl certs for use with rancher.
-      #- "/<CERT_DIRECTORY>/<FULL_CHAIN.pem>:/etc/rancher/ssl/cert.pem"
+      #- "/<CERT_DIRECTORY>/<FULL_CHAIN.2.0,pem>:/etc/rancher/ssl/cert.pem"
       #- "/<CERT_DIRECTORY>/<PRIVATE_KEY.pem>:/etc/rancher/ssl/key.pem"
       #- "/<CERT_DIRECTORY>/<CA_CERTS.pem>:/etc/rancher/ssl/cacerts.pem"
 
