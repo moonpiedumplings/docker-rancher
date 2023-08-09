@@ -4,7 +4,7 @@ services:
   rancher-manager:
     #build: .
     privileged: true
-    image: docker.io/rancher/rancher:v2.7-head
+    image: docker.io/rancher/rancher:latest
     ports:
       - "81:80"
       - "444:443"
