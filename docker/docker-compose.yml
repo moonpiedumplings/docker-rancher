@@ -15,7 +15,8 @@ services:
       #- "/<CERT_DIRECTORY>/<FULL_CHAIN.2.0,pem>:/etc/rancher/ssl/cert.pem"
       #- "/<CERT_DIRECTORY>/<PRIVATE_KEY.pem>:/etc/rancher/ssl/key.pem"
       #- "/<CERT_DIRECTORY>/<CA_CERTS.pem>:/etc/rancher/ssl/cacerts.pem"
-
+    environment:
+      - CATTLE_BOOTSTRAP_PASSWORD=password
   # rancher-db:
   #   image: mariadb
   #   environment:

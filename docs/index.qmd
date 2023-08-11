@@ -2,6 +2,85 @@
 title: "Rancher-Ops"
 ---
 
-This is a Quarto website.
+# Installing Rancher
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+Simply clone the repository at <https://github.com/moonpiedumplings/rancher-ops>
+
+`cd rancher-ops/docker`
+
+`docker-compose up`. Or alternatively, `docker compose up`
+
+Then, rancher will be available at yourip:444. The ip you access rancher from is important, as it notes this and uses this ip to point things it controls, so don't access it from localhost:444 or nonpublicvlan:444 or the like.
+
+I have set the default password to "password", although you can change it in the `docker-compose.yml` file. 
+
+# K3s. 
+
+I cannot, for the life of me, get RKE2 clusters working, so I am ogoing with K3 clusters instead. You can create K3s clusters from the UI. 
+
+For our use case, we will be creating externally managed clusters:
+
+In the UI, create cluster > custom > and then change the kubernetes version from rke2 to k3s. 
+
+
+## Calico Networking
+
+### Installing K3s without flannel
+
+Because vcluster needs calico networking, rather than the flannel that k3s offers by default, we need to make some changes to the installation process. 
+
+In the UI for the installation, select agent environment variables, and set them like so:
+
+![](images/agentvars.jpg)
+
+Here is some code blocks that are copyable with one click, to make it easy:
+
+```{.default}
+INSTALL_K3S_EXEC
+```
+```{.default}
+--flannel-backend=none --disable-network-policy
+```
+
+These wil set the necessary environment variable for the k3 installer that prevent it from installing flannel.
+
+I also recommend adding the environment variables listed in the setting up kubectl section of this document. 
+
+### Installing Calico to a k3s cluster
+
+The process is fairly simple, and the steps can be found [on calico's docs](https://docs.tigera.io/calico/latest/getting-started/kubernetes/k3s/multi-node-install#install-calico)
+
+And now calico is installed and running. When everything is setup, rancher should be able to see the K3s cluster, and do management operations on it.
+
+## Setting up Kubectl
+
+While not strictly needed, using these agent environment variables:
+
+:::: {.columns}
+
+::: {.column width="45%"}
+```{.default}
+K3S_KUBECONFIG_MODE
+```
+:::
+
+::: {.column width="45%"}
+```{.default}
+644
+```
+:::
+
+::::
+
+Will enable kubecttl to run without needing sudo, if you are directly accessing one of the controller nodes on the cluster (k3s add kubectl and related tools to your path)
+
+
+## Vcluster
+
+To install vcluster on a system with kubectl configured and pointed at your specific cluster
+
+
+# Installing Nvidia container runtime.
+
+K3s have a feature where they [automatically detect and enable](https://docs.k3s.io/advanced#nvidia-container-runtime-support) Nvidia container runtime if it is installed, which makes things simple.
+
