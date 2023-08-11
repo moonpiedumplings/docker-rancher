@@ -138,6 +138,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#installing-rancher" id="toc-installing-rancher" class="nav-link active" data-scroll-target="#installing-rancher">Installing Rancher</a></li>
   <li><a href="#k3s." id="toc-k3s." class="nav-link" data-scroll-target="#k3s.">K3s.</a>
   <ul class="collapse">
+  <li><a href="#networkmanager" id="toc-networkmanager" class="nav-link" data-scroll-target="#networkmanager">NetworkManager</a></li>
   <li><a href="#calico-networking" id="toc-calico-networking" class="nav-link" data-scroll-target="#calico-networking">Calico Networking</a>
   <ul class="collapse">
   <li><a href="#installing-k3s-without-flannel" id="toc-installing-k3s-without-flannel" class="nav-link" data-scroll-target="#installing-k3s-without-flannel">Installing K3s without flannel</a></li>
@@ -183,6 +184,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>I cannot, for the life of me, get RKE2 clusters working, so I am ogoing with K3 clusters instead. You can create K3s clusters from the UI.</p>
 <p>For our use case, we will be creating externally managed clusters:</p>
 <p>In the UI, create cluster &gt; custom &gt; and then change the kubernetes version from rke2 to k3s.</p>
+<section id="networkmanager" class="level2">
+<h2 class="anchored" data-anchor-id="networkmanager">NetworkManager</h2>
+<p>If your system is using networkmanager, like my virtual machines, were than, you need to add some things to make sure that networkmanager does not get in the way of the k3s/rke2 managed interfaces:</p>
+<p><a href="https://docs.rke2.io/known_issues#networkmanager" class="uri">https://docs.rke2.io/known_issues#networkmanager</a></p>
+</section>
 <section id="calico-networking" class="level2">
 <h2 class="anchored" data-anchor-id="calico-networking">Calico Networking</h2>
 <section id="installing-k3s-without-flannel" class="level3">
@@ -199,6 +205,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="installing-calico-to-a-k3s-cluster" class="level3">
 <h3 class="anchored" data-anchor-id="installing-calico-to-a-k3s-cluster">Installing Calico to a k3s cluster</h3>
 <p>The process is fairly simple, and the steps can be found <a href="https://docs.tigera.io/calico/latest/getting-started/kubernetes/k3s/multi-node-install#install-calico">on calico’s docs</a></p>
+<p>Ensure that you follow the manifest steps, the one with <code>kubectl apply</code>, because in my testing, using the operator steps will cause the cluster to perpetually hang on “waiting for cluster agent to connect” in rancher.</p>
+<p>The current command for this step is:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Two things should be noted, if you are trying to automate this:</p>
+<ul>
+<li>You can’t run kubectl in the same bash session as you run the install command, as the way it adds itself to path only takes effect after you reload or load a new bash shell</li>
+<li>The kubernetes cluster takes a few seconds before it is ready to have kubectl ran against it. Commands ran earlier than that will fail.</li>
+</ul>
 <p>And now calico is installed and running. When everything is setup, rancher should be able to see the K3s cluster, and do management operations on it.</p>
 </section>
 </section>
@@ -207,16 +221,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>While not strictly needed, using these agent environment variables:</p>
 <div class="columns">
 <div class="column" style="width:45%;">
-<div class="sourceCode" id="cb3"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>K3S_KUBECONFIG_MODE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>K3S_KUBECONFIG_MODE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:45%;">
-<div class="sourceCode" id="cb4"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>644</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>644</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <p>Will enable kubecttl to run without needing sudo, if you are directly accessing one of the controller nodes on the cluster (k3s add kubectl and related tools to your path)</p>
 </section>
 <section id="vcluster" class="level2">
 <h2 class="anchored" data-anchor-id="vcluster">Vcluster</h2>
-<p>To install vcluster on a system with kubectl configured and pointed at your specific cluster</p>
+<p>To install vcluster on a system with kubectl configured and pointed at your specific cluster, simply follow the <a href="https://www.vcluster.com/docs/getting-started/setup">vcluster docs</a>.</p>
+<p>To create a vcluster, use <code>vcluster create clustername --connect=false</code>. This will prevent vcluster from creating and running a new proxy process which kubectl will try to connect to.</p>
+<p>To list vclusters, <code>vcluster list</code></p>
+<p>To connect to a vcluster, use <code>vcluster connect clusternmae -n &lt;optionalnamespace&gt; -- bash</code>. This creates a new bash shell with the kubectl context switched to that vcluster. <code>exit</code> to exit.</p>
 </section>
 </section>
 <section id="installing-nvidia-container-runtime." class="level1">
