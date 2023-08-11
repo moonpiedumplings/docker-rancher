@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Rancher-Ops",
+    "section": "",
+    "text": "Simply clone the repository at https://github.com/moonpiedumplings/rancher-ops\ncd rancher-ops/docker\ndocker-compose up. Or alternatively, docker compose up\nThen, rancher will be available at yourip:444. The ip you access rancher from is important, as it notes this and uses this ip to point things it controls, so don’t access it from localhost:444 or nonpublicvlan:444 or the like.\nI have set the default password to “password”, although you can change it in the docker-compose.yml file."
+  },
+  {
+    "objectID": "index.html#calico-networking",
+    "href": "index.html#calico-networking",
+    "title": "Rancher-Ops",
+    "section": "Calico Networking",
+    "text": "Calico Networking\n\nInstalling K3s without flannel\nBecause vcluster needs calico networking, rather than the flannel that k3s offers by default, we need to make some changes to the installation process.\nIn the UI for the installation, select agent environment variables, and set them like so:\n\nHere is some code blocks that are copyable with one click, to make it easy:\nINSTALL_K3S_EXEC\n--flannel-backend=none --disable-network-policy\nThese wil set the necessary environment variable for the k3 installer that prevent it from installing flannel.\nI also recommend adding the environment variables listed in the setting up kubectl section of this document.\n\n\nInstalling Calico to a k3s cluster\nThe process is fairly simple, and the steps can be found on calico’s docs\nAnd now calico is installed and running. When everything is setup, rancher should be able to see the K3s cluster, and do management operations on it."
+  },
+  {
+    "objectID": "index.html#setting-up-kubectl",
+    "href": "index.html#setting-up-kubectl",
+    "title": "Rancher-Ops",
+    "section": "Setting up Kubectl",
+    "text": "Setting up Kubectl\nWhile not strictly needed, using these agent environment variables:\n\n\nK3S_KUBECONFIG_MODE\n\n644\n\n\nWill enable kubecttl to run without needing sudo, if you are directly accessing one of the controller nodes on the cluster (k3s add kubectl and related tools to your path)"
+  },
+  {
+    "objectID": "index.html#vcluster",
+    "href": "index.html#vcluster",
+    "title": "Rancher-Ops",
+    "section": "Vcluster",
+    "text": "Vcluster\nTo install vcluster on a system with kubectl configured and pointed at your specific cluster"
+  }
+]
