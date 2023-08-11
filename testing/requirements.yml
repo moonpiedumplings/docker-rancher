@@ -1,0 +1,6 @@
+# install from here using ansible-galaxy install -r requirements.yml
+---
+# to install a whole collection:
+
+collections: 
+- community.libvirt # this pulls community.libvirt, and it's required dependencies

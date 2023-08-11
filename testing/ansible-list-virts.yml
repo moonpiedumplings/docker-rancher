@@ -1,0 +1,18 @@
+---
+- name: ansible + libvirt testins
+  hosts: localhost
+  tasks:
+    - name: List available networks
+      community.libvirt.virt_net:
+        command: list_nets
+    - name: List all VMs
+      community.libvirt.virt:
+        command: list_vms
+      register: all_vms
+
+    - name: List only running VMs
+      community.libvirt.virt:
+        command: list_vms
+        state: running
+      register: running_vms
+

@@ -1,0 +1,24 @@
+---
+title: "Notes on ansible+testing"
+theme: darkly
+---
+
+Found on guide to create images using libvirt and cloud init:
+
+<https://sumit-ghosh.com/posts/create-vm-using-libvirt-cloud-images-cloud-init/>
+
+But a virt install ansible module doesn't seem to exist. 
+
+This red hat guide looks pretty appealing, it discusses using an xml template for libvirt, and using cloud init to install the vm.
+
+<https://www.redhat.com/sysadmin/build-VM-fast-ansible>
+
+Here are related ansible docs:
+
+<https://docs.ansible.com/ansible/latest/collections/community/libvirt/virt_module.html>
+
+<https://docs.ansible.com/ansible/latest/collections/community/libvirt/virt_net_module.html#ansible-collections-community-libvirt-virt-net-module>
+
+I will need to create and start the default network.
+
+Currently, I'm trying to get ansible in nix-shell working. I am having trouble installing the required dependencies. 

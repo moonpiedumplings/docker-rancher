@@ -22,6 +22,12 @@ For our use case, we will be creating externally managed clusters:
 
 In the UI, create cluster > custom > and then change the kubernetes version from rke2 to k3s. 
 
+## NetworkManager
+
+If your system is using networkmanager, like my virtual machines, were than,  you need to add some things to make sure that networkmanager does not get in the way of the k3s/rke2 managed interfaces:
+
+<https://docs.rke2.io/known_issues#networkmanager>
+
 
 ## Calico Networking
 
@@ -50,7 +56,22 @@ I also recommend adding the environment variables listed in the setting up kubec
 
 The process is fairly simple, and the steps can be found [on calico's docs](https://docs.tigera.io/calico/latest/getting-started/kubernetes/k3s/multi-node-install#install-calico)
 
+Ensure that you follow the manifest steps, the one with `kubectl apply`, because in my testing, using the operator steps will cause the cluster to perpetually hang on "waiting for cluster agent to connect" in rancher. 
+
+The current command for this step is:
+
+```{.default}
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml
+```
+
+Two things should be noted, if you are trying to automate this:
+
+* You can't run kubectl in the same bash session as you run the install command, as the way it adds itself to path only takes effect after you reload or load a new bash shell
+* The kubernetes cluster takes a few seconds before it is ready to have kubectl ran against it. Commands ran earlier than that will fail.
+
 And now calico is installed and running. When everything is setup, rancher should be able to see the K3s cluster, and do management operations on it.
+
+
 
 ## Setting up Kubectl
 
@@ -77,8 +98,13 @@ Will enable kubecttl to run without needing sudo, if you are directly accessing 
 
 ## Vcluster
 
-To install vcluster on a system with kubectl configured and pointed at your specific cluster
+To install vcluster on a system with kubectl configured and pointed at your specific cluster, simply follow the [vcluster docs](https://www.vcluster.com/docs/getting-started/setup).
 
+To create a vcluster, use `vcluster create clustername --connect=false`. This will prevent vcluster from creating and running a new proxy process which kubectl will try to connect to.
+
+To list vclusters, `vcluster list`
+
+To connect to a vcluster, use `vcluster connect clusternmae -n <optionalnamespace> -- bash`. This creates a new bash shell with the kubectl context switched to that vcluster. `exit` to exit. 
 
 # Installing Nvidia container runtime.
 
