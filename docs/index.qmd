@@ -110,3 +110,5 @@ To connect to a vcluster, use `vcluster connect clusternmae -n <optionalnamespac
 
 K3s have a feature where they [automatically detect and enable](https://docs.k3s.io/advanced#nvidia-container-runtime-support) Nvidia container runtime if it is installed, which makes things simple.
 
+
+

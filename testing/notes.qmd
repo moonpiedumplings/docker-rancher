@@ -21,4 +21,6 @@ Here are related ansible docs:
 
 I will need to create and start the default network.
 
-Currently, I'm trying to get ansible in nix-shell working. I am having trouble installing the required dependencies. 
+Currently, I'm trying to get ansible in nix-shell working. I am having trouble installing the required dependencies.
+
+I got it working. Now I am getting started on creating the vm using ansible. Note to self: use virt install, either directly or via  an ansible module if I can find one, to install the vm because it has a --cloud-init option for cloud init configuration. 
