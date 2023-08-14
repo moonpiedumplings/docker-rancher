@@ -28,11 +28,11 @@
     "text": "Calico Networking\n\nInstalling K3s without flannel\nBecause vcluster needs calico networking, rather than the flannel that k3s offers by default, we need to make some changes to the installation process.\nIn the UI for the installation, select agent environment variables, and set them like so:\n\nHere is some code blocks that are copyable with one click, to make it easy:\nINSTALL_K3S_EXEC\n--flannel-backend=none --disable-network-policy\nThese wil set the necessary environment variable for the k3 installer that prevent it from installing flannel.\nI also recommend adding the environment variables listed in the setting up kubectl section of this document.\n\n\nInstalling Calico to a k3s cluster\nThe process is fairly simple, and the steps can be found on calico’s docs\nEnsure that you follow the manifest steps, the one with kubectl apply, because in my testing, using the operator steps will cause the cluster to perpetually hang on “waiting for cluster agent to connect” in rancher.\nThe current command for this step is:\nkubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml\nTwo things should be noted, if you are trying to automate this:\n\nYou can’t run kubectl in the same bash session as you run the install command, as the way it adds itself to path only takes effect after you reload or load a new bash shell\nThe kubernetes cluster takes a few seconds before it is ready to have kubectl ran against it. Commands ran earlier than that will fail.\n\nAnd now calico is installed and running. When everything is setup, rancher should be able to see the K3s cluster, and do management operations on it."
   },
   {
-    "objectID": "index.html#setting-up-kubectl",
-    "href": "index.html#setting-up-kubectl",
+    "objectID": "index.html#setting-up-kubectl-to-work-without-sudo",
+    "href": "index.html#setting-up-kubectl-to-work-without-sudo",
     "title": "Rancher-Ops",
-    "section": "Setting up Kubectl",
-    "text": "Setting up Kubectl\nWhile not strictly needed, using these agent environment variables:\n\n\nK3S_KUBECONFIG_MODE\n\n644\n\n\nWill enable kubecttl to run without needing sudo, if you are directly accessing one of the controller nodes on the cluster (k3s add kubectl and related tools to your path)"
+    "section": "Setting up Kubectl to work without sudo",
+    "text": "Setting up Kubectl to work without sudo\nWhile not strictly needed, using these agent environment variables:\n\n\nK3S_KUBECONFIG_MODE\n\n644\n\n\nWill enable kubecttl to run without needing sudo, if you are directly accessing one of the controller nodes on the cluster (k3s add kubectl and related tools to your path)"
   },
   {
     "objectID": "index.html#vcluster",

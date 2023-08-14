@@ -144,7 +144,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#installing-k3s-without-flannel" id="toc-installing-k3s-without-flannel" class="nav-link" data-scroll-target="#installing-k3s-without-flannel">Installing K3s without flannel</a></li>
   <li><a href="#installing-calico-to-a-k3s-cluster" id="toc-installing-calico-to-a-k3s-cluster" class="nav-link" data-scroll-target="#installing-calico-to-a-k3s-cluster">Installing Calico to a k3s cluster</a></li>
   </ul></li>
-  <li><a href="#setting-up-kubectl" id="toc-setting-up-kubectl" class="nav-link" data-scroll-target="#setting-up-kubectl">Setting up Kubectl</a></li>
+  <li><a href="#setting-up-kubectl-to-work-without-sudo" id="toc-setting-up-kubectl-to-work-without-sudo" class="nav-link" data-scroll-target="#setting-up-kubectl-to-work-without-sudo">Setting up Kubectl to work without sudo</a></li>
   <li><a href="#vcluster" id="toc-vcluster" class="nav-link" data-scroll-target="#vcluster">Vcluster</a></li>
   </ul></li>
   <li><a href="#installing-nvidia-container-runtime." id="toc-installing-nvidia-container-runtime." class="nav-link" data-scroll-target="#installing-nvidia-container-runtime.">Installing Nvidia container runtime.</a></li>
@@ -181,7 +181,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="k3s." class="level1">
 <h1>K3s.</h1>
-<p>I cannot, for the life of me, get RKE2 clusters working, so I am ogoing with K3 clusters instead. You can create K3s clusters from the UI.</p>
+<p>I get RKE2 clusters working, so I am ogoing with K3 clusters instead. You can create K3s clusters from the UI.</p>
 <p>For our use case, we will be creating externally managed clusters:</p>
 <p>In the UI, create cluster &gt; custom &gt; and then change the kubernetes version from rke2 to k3s.</p>
 <section id="networkmanager" class="level2">
@@ -216,8 +216,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>And now calico is installed and running. When everything is setup, rancher should be able to see the K3s cluster, and do management operations on it.</p>
 </section>
 </section>
-<section id="setting-up-kubectl" class="level2">
-<h2 class="anchored" data-anchor-id="setting-up-kubectl">Setting up Kubectl</h2>
+<section id="setting-up-kubectl-to-work-without-sudo" class="level2">
+<h2 class="anchored" data-anchor-id="setting-up-kubectl-to-work-without-sudo">Setting up Kubectl to work without sudo</h2>
 <p>While not strictly needed, using these agent environment variables:</p>
 <div class="columns">
 <div class="column" style="width:45%;">
@@ -239,6 +239,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="installing-nvidia-container-runtime." class="level1">
 <h1>Installing Nvidia container runtime.</h1>
 <p>K3s have a feature where they <a href="https://docs.k3s.io/advanced#nvidia-container-runtime-support">automatically detect and enable</a> Nvidia container runtime if it is installed, which makes things simple.</p>
+<p>Linked on the K3s website, is the <a href="https://nvidia.github.io/libnvidia-container/">nvidia website</a>, which then links to a guide to install the nvidia container runtime.</p>
+<p>I followed the guide from <a href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#docker">docker</a> to <code>sudo apt-get update</code>.</p>
+<p>After that, I decided to follow the steps on the K3s page.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode default code-overflow-wrap code-with-copy"><code class="sourceCode default"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>apt install -y nvidia-container-runtime cuda-drivers-fabricmanager-535 nvidia-headless-535-server</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Replace “535” with whatever version of the nvidia driver you want to install.</p>
+<p>And sure enough, when I run the command recommended by the k3s to check if the nvidia container runtime installed, it is.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>root@ubuntu:/var/lib/rancher/k3s/agent/etc/containerd# grep nvidia /var/lib/rancher/k3s/agent/etc/containerd/config.toml</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>[plugins."io.containerd.grpc.v1.cri".containerd.runtimes."nvidia"]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>[plugins."io.containerd.grpc.v1.cri".containerd.runtimes."nvidia".options]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  BinaryName = "/usr/bin/nvidia-container-runtime"</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Of course, the fabricmanager service dies, complaining about not being able to find an nvidia gpu, but that make sense, because this virtual machine has no gpu.</p>
 
 
 </section>
