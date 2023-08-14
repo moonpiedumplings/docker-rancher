@@ -40,5 +40,12 @@
     "title": "Rancher-Ops",
     "section": "Vcluster",
     "text": "Vcluster\nTo install vcluster on a system with kubectl configured and pointed at your specific cluster, simply follow the vcluster docs.\nTo create a vcluster, use vcluster create clustername --connect=false. This will prevent vcluster from creating and running a new proxy process which kubectl will try to connect to.\nTo list vclusters, vcluster list\nTo connect to a vcluster, use vcluster connect clusternmae -n &lt;optionalnamespace&gt; -- bash. This creates a new bash shell with the kubectl context switched to that vcluster. exit to exit."
+  },
+  {
+    "objectID": "notes.html",
+    "href": "notes.html",
+    "title": "Rancher-Ops Notes",
+    "section": "",
+    "text": "This document is mostly for personal usage, the steps I took to build the guides on the main page.\n\nKata Containers\nI found a guide to deploy Kata Containers on their github, using the kata-deploy tool.\nAccording to a related doc packaged install methods, kata-deploy is more for testing, and users are recommended to use the distro packages, as they have automatic updates. However, the only distro packages available are for Centos, and Fedora. 34.\nSome guides for ubuntu, like this one ask to you add a repository, but that repository is unmaintaned and has not been updated since 2019.\nThere is also an unmaintained snap package."
   }
 ]
