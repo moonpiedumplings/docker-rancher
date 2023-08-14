@@ -1,0 +1,19 @@
+---
+title: "Rancher-Ops Notes"
+---
+
+
+This document is mostly for personal usage, the steps I took to build the guides on the main page. 
+
+# Kata Containers
+
+I found a guide to deploy Kata Containers on their [github](https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md), using the kata-deploy tool. 
+
+According to a related doc [packaged install methods](https://github.com/kata-containers/kata-containers/blob/main/docs/install/README.md#packaged-installation-methods), kata-deploy is more for testing, and users are recommended to use the distro packages, as they have automatic updates. However, the only distro packages available are for Centos, and Fedora. 34. 
+
+Some guides for ubuntu, like [this one](https://jafar390.medium.com/install-kata-containers-on-linux-with-docker-container-manager-28551ec8c034) ask to you add a [repository](http://download.opensuse.org/repositories/home:/katacontainers:/), but that repository is unmaintaned and has not been updated since 2019. 
+
+There is also an unmaintained snap package. 
+
+
+

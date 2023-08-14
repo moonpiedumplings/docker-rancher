@@ -22,6 +22,8 @@ For our use case, we will be creating externally managed clusters:
 
 In the UI, create cluster > custom > and then change the kubernetes version from rke2 to k3s. 
 
+If you want K3s to have nvidia container runtime support, follow the insutrctions in that section below. Nodes must be set up that way before k3s is installed on them.
+
 ## NetworkManager
 
 If your system is using networkmanager, like my virtual machines, were than,  you need to add some things to make sure that networkmanager does not get in the way of the k3s/rke2 managed interfaces:
@@ -132,7 +134,9 @@ root@ubuntu:/var/lib/rancher/k3s/agent/etc/containerd# grep nvidia /var/lib/ranc
   BinaryName = "/usr/bin/nvidia-container-runtime"
 ```
 
-Of course, the fabricmanager service dies, complaining about not being able to find an nvidia gpu, but that make sense, because this virtual machine has no gpu. 
+Of course, the fabricmanager service dies, complaining about not being able to find an nvidia gpu, but that make sense, because this virtual machine has no gpu.
+
+
 
 
 
