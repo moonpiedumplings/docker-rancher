@@ -16,7 +16,7 @@ I have set the default password to "password", although you can change it in the
 
 # K3s. 
 
-I cannot, for the life of me, get RKE2 clusters working, so I am ogoing with K3 clusters instead. You can create K3s clusters from the UI. 
+I get RKE2 clusters working, so I am ogoing with K3 clusters instead. You can create K3s clusters from the UI. 
 
 For our use case, we will be creating externally managed clusters:
 
@@ -73,7 +73,7 @@ And now calico is installed and running. When everything is setup, rancher shoul
 
 
 
-## Setting up Kubectl
+## Setting up Kubectl to work without sudo
 
 While not strictly needed, using these agent environment variables:
 
@@ -109,6 +109,32 @@ To connect to a vcluster, use `vcluster connect clusternmae -n <optionalnamespac
 # Installing Nvidia container runtime.
 
 K3s have a feature where they [automatically detect and enable](https://docs.k3s.io/advanced#nvidia-container-runtime-support) Nvidia container runtime if it is installed, which makes things simple.
+
+
+Linked on the K3s website, is the [nvidia website](https://nvidia.github.io/libnvidia-container/), which then links to a guide to install the nvidia container runtime.
+
+I followed the guide from [docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#docker) to `sudo apt-get update`. 
+
+After that, I decided to follow the steps on the K3s page. 
+
+```{.default .code-overflow-wrap}
+apt install -y nvidia-container-runtime cuda-drivers-fabricmanager-535 nvidia-headless-535-server
+```
+
+Replace "535" with whatever version of the nvidia driver you want to install. 
+
+And sure enough, when I run the command recommended by the k3s to check if the nvidia container runtime installed, it is.
+
+```{.default}
+root@ubuntu:/var/lib/rancher/k3s/agent/etc/containerd# grep nvidia /var/lib/rancher/k3s/agent/etc/containerd/config.toml
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes."nvidia"]
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes."nvidia".options]
+  BinaryName = "/usr/bin/nvidia-container-runtime"
+```
+
+Of course, the fabricmanager service dies, complaining about not being able to find an nvidia gpu, but that make sense, because this virtual machine has no gpu. 
+
+
 
 
 
