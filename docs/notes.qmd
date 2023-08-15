@@ -16,4 +16,70 @@ Some guides for ubuntu, like [this one](https://jafar390.medium.com/install-kata
 There is also an unmaintained snap package. 
 
 
+Another possibility is to use juju. Juju can add an externally managed kubernetes cluster, using the [add-k8s](https://juju.is/docs/juju/juju-add-k8s) command. (juju list-models will show where you can deploy to, and show-model gives more info.)
 
+Then, you can use the juju operator to deploy the [kata charm](https://charmhub.io/kata)
+
+Then, you should be able to upgrade the juju charm using [juju refresh](https://juju.is/docs/juju/manage-applications#heading--upgrade-a-charmhub-charm)
+
+
+```{.default}
+sudo snap install juju --classic
+```
+
+```{.default}
+export PATH=/snap/bin:$PATH
+```
+
+```{.defualt}
+juju add-k8s mycluster
+```
+
+But I get an error:
+
+```{.default}
+moonpie@ubuntu:~$ juju add-k8s mycluster
+ERROR cannot load ssh client keys: mkdir /home/moonpie/.local: permission denied
+moonpie@ubuntu:~$ sudo juju add-k8s mycluster
+[sudo] password for moonpie: 
+ERROR stat .: permission denied
+moonpie@ubuntu:~$ 
+```
+
+I don't know why I get this error, but I am guessing it has something to do with snap sandboxing. 
+
+Oh, I missed some [docs](https://juju.is/docs/juju/get-started-with-juju#heading--install-the-juju-cli-client).
+
+```{.default}
+mkdir -p ~/.local/share
+```
+
+
+```{.default}
+kubectl config view --raw | juju add-k8s mycluster --client
+```
+
+```{.default}
+juju add-model modelname
+```
+
+```{.default}
+juju deploy kata
+```
+
+And it claims to have worked, but now my kubernetes command doesn't work:
+
+```{.default}
+moonpie@ubuntu:~$ kubectl get all
+The connection to the server 127.0.0.1:6443 was refused - did you specify the right host or port?
+```
+
+Thankfully, the kubernetes shell located within rancher still works (I had been using kubectl from the single ubuntu vm I provisioned to be a controller and worker).
+
+However, when I run the kata container test command, it doesn't work:
+
+` Pods "php-apache-kata-qemu-799d4cd788-" is forbidden: pod rejected: RuntimeClass "kata-qemu" not found:Deployment does not have minimum availability.`
+
+This makes me think that kata containers weren't actually installed. 
+
+Well, I am first going to look into redownloading the kubeconfig file to the server, that way I can use both juju and kubectl on the same machine. 
