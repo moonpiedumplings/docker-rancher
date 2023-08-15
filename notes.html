@@ -136,6 +136,9 @@ ul.task-list li input[type="checkbox"] {
 <p>According to a related doc <a href="https://github.com/kata-containers/kata-containers/blob/main/docs/install/README.md#packaged-installation-methods">packaged install methods</a>, kata-deploy is more for testing, and users are recommended to use the distro packages, as they have automatic updates. However, the only distro packages available are for Centos, and Fedora. 34.</p>
 <p>Some guides for ubuntu, like <a href="https://jafar390.medium.com/install-kata-containers-on-linux-with-docker-container-manager-28551ec8c034">this one</a> ask to you add a <a href="http://download.opensuse.org/repositories/home:/katacontainers:/">repository</a>, but that repository is unmaintaned and has not been updated since 2019.</p>
 <p>There is also an unmaintained snap package.</p>
+<p>Another possibility is to use juju. Juju can add an externally managed kubernetes cluster, using the <a href="https://juju.is/docs/juju/juju-add-k8s">add-k8s</a> command. (juju list-models will show where you can deploy to, and show-model gives more info.)</p>
+<p>Then, you can use the juju operator to deploy the <a href="https://charmhub.io/kata">kata charm</a></p>
+<p>Then, you should be able to upgrade the juju charm using <a href="https://juju.is/docs/juju/manage-applications#heading--upgrade-a-charmhub-charm">juju refresh</a></p>
 
 
 </section>
