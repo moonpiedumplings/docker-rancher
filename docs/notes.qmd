@@ -83,3 +83,5 @@ However, when I run the kata container test command, it doesn't work:
 This makes me think that kata containers weren't actually installed. 
 
 Well, I am first going to look into redownloading the kubeconfig file to the server, that way I can use both juju and kubectl on the same machine. 
+
+I am also going to look into alternative options to use juju to configure a k3s/k8s server. 

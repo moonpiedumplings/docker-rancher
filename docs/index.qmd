@@ -16,7 +16,7 @@ I have set the default password to "password", although you can change it in the
 
 # K3s. 
 
-I get RKE2 clusters working, so I am ogoing with K3 clusters instead. You can create K3s clusters from the UI. 
+I can't get RKE2 clusters working, so I am going with K3 clusters instead. You can create K3s clusters from the UI. 
 
 For our use case, we will be creating externally managed clusters:
 
