@@ -233,6 +233,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  "code": 401</span>
 <span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Although kubectl still works. I am guessing I didn’t set up the the cluster authentication properly, which is weirdish.</p>
+<p>No, I think I know why. It’s becaause localhost isnt’ where the kubectl api is, it’s on the rancher server. I got the kubectl config from rancher, and now I will cat it into juju.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>cat config | juju add-k8s .... nevermind</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>moonpie@ubuntu:~/.kube$ juju clouds</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>Only clouds with registered credentials are shown.</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>There are more clouds, use --all to see them.</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>Clouds available on the controller:</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>Cloud      Regions  Default    Type</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>localhost  1        localhost  lxd  </span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>Clouds available on the client:</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>Cloud      Regions  Default    Type  Credentials  Source    Description</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>k3s        0                   k8s   0            built-in  A local Kubernetes context</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>localhost  1        localhost  lxd   1            built-in  LXD Container Hypervisor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Juju automatically detects k3s.</p>
+<pre><code>juju add-cloud k3s
+juju add-credential k3s</code></pre>
+<p>Obviously, my credentials are incorrect:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>moonpie@ubuntu:~/.kube$ juju add-model test k3s</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>ERROR failed to open kubernetes client: unable to determine legacy status for namespace "test": the server has asked for the client to provide credentials (get namespaces test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>But it seems I can get correct credentials from the rancher kubeconfig file.</p>
 
 
 </section>
