@@ -85,3 +85,116 @@ This makes me think that kata containers weren't actually installed.
 Well, I am first going to look into redownloading the kubeconfig file to the server, that way I can use both juju and kubectl on the same machine. 
 
 I am also going to look into alternative options to use juju to configure a k3s/k8s server. 
+
+Okay, juju architechture is very confusing. Here's what I understand:
+
+* Juju client: This is the command line interface. It interacts with juju controllers
+* Controller: Controller nodes/vm's/clusters are responsible for deploying stuff to other clouds
+* Clouds are things like kubernetes clusters, aws/gcp, or openstack. You create 1 or more models on these clouds, to deploy to.
+* Model. Models are where you deploy to. 
+
+So what I want to do is to add 
+
+
+```{.default}
+juju bootstrap localhost
+```
+
+The bootstrap command creates a controller. This creates a local controller, by upping lxc containers. 
+
+However, I get an error when I try to run it. 
+
+The whole error is [linked here](jujuerror.qmd), but in short, the lxd container on the inside complains about not having network access. 
+
+
+I don't know why I'm getting this error, but I'm guessing it's because I am trying to run this on a virtual machine behind NAT, but then it is trying to create either a virtual machine or a container using lxd, so perhaps the nesting of networks is breaking normal internet connectivity.
+
+I found the [docs](https://juju.is/docs/dev/debug-bootstrapmachine-failures#heading--lxc--lxd) for debugging juju, so I will try some of that. 
+
+I found a [forum post](https://discourse.charmhub.io/t/juju-bootstrap-failing-juju-controller-cannot-reach-ubuntu/8846) with my exact issue.  
+
+Apparently, the issue was that having docker and lxd running at the same time messes some things up. So I ran a command, and it worked:
+
+```{.default}
+sudo iptables -I DOCKER-USER  -j ACCEPT
+```
+
+
+
+```{.default}
+kubectl config view --raw | juju add-k8s clustername --controller=localhost-localhost
+```
+
+```{.default}
+juju add-model modelname clustername/clustername
+```
+
+But I get an error
+
+```{.default}
+moonpie@ubuntu:~$ juju add-model default default
+ERROR failed to open kubernetes client: unable to determine legacy status for namespace "default": Get "https://127.0.0.1:6443/api/v1/namespaces/default": dial tcp 127.0.0.1:6443: connect: connection refused
+```
+
+Firewall? No, I have it disabled. 
+
+When I attempt to curl the cluster from the ubuntu machine, I get an error:
+
+```{.default}
+moonpie@ubuntu:~$ curl https://127.0.0.1:6443/api/v1/namespaces/default --insecure
+{
+  "kind": "Status",
+  "apiVersion": "v1",
+  "metadata": {},
+  "status": "Failure",
+  "message": "Unauthorized",
+  "reason": "Unauthorized",
+  "code": 401
+}
+```
+
+Although kubectl still works. I am guessing I didn't set up the the cluster authentication properly, which is weirdish. 
+
+No, I think I know why. It's becaause localhost isnt' where the kubectl api is, it's on the rancher server. I got the kubectl config from rancher, and now I will cat it into juju.
+
+```{.default}
+cat config | juju add-k8s .... nevermind
+```
+
+
+```{.default}
+moonpie@ubuntu:~/.kube$ juju clouds
+Only clouds with registered credentials are shown.
+There are more clouds, use --all to see them.
+
+Clouds available on the controller:
+Cloud      Regions  Default    Type
+localhost  1        localhost  lxd  
+
+Clouds available on the client:
+Cloud      Regions  Default    Type  Credentials  Source    Description
+k3s        0                   k8s   0            built-in  A local Kubernetes context
+localhost  1        localhost  lxd   1            built-in  LXD Container Hypervisor
+```
+
+Juju automatically detects k3s. 
+
+```
+juju add-cloud k3s
+juju add-credential k3s
+```
+
+Obviously, my credentials are incorrect:
+
+
+```{.default}
+moonpie@ubuntu:~/.kube$ juju add-model test k3s
+ERROR failed to open kubernetes client: unable to determine legacy status for namespace "test": the server has asked for the client to provide credentials (get namespaces test)
+```
+
+But it seems I can get correct credentials from the rancher kubeconfig file. 
+
+
+
+
+

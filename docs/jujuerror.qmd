@@ -1,0 +1,279 @@
+```{.default}
+moonpie@ubuntu:~$ juju bootstrap localhost
+Creating Juju controller "localhost-localhost" on localhost/localhost
+Looking for packaged Juju agent version 3.1.5 for amd64
+Located Juju agent version 3.1.5-ubuntu-amd64 at https://streams.canonical.com/juju/tools/agent/3.1.5/juju-3.1.5-linux-amd64.tgz
+To configure your system to better support LXD containers, please see: https://linuxcontainers.org/lxd/docs/master/explanation/performance_tuning/
+Launching controller instance(s) on localhost/localhost...
+ - juju-f7ba4a-0 (arch=amd64)          
+Installing Juju agent on bootstrap instance
+Waiting for address
+Attempting to connect to 10.35.212.170:22
+Connected to 10.35.212.170
+Running machine configuration script...
+Cloud-init v. 23.2.2-0ubuntu0~22.04.1 running 'init-local' at Wed, 16 Aug 2023 18:36:53 +0000. Up 6.02 seconds.
+Cloud-init v. 23.2.2-0ubuntu0~22.04.1 running 'init' at Wed, 16 Aug 2023 18:36:57 +0000. Up 10.04 seconds.
+ci-info: +++++++++++++++++++++++++++++++++++++++Net device info+++++++++++++++++++++++++++++++++++++++
+ci-info: +--------+-------+-----------------------------+---------------+--------+-------------------+
+ci-info: | Device |   Up  |           Address           |      Mask     | Scope  |     Hw-Address    |
+ci-info: +--------+-------+-----------------------------+---------------+--------+-------------------+
+ci-info: |  eth0  |  True |        10.35.212.170        | 255.255.255.0 | global | 00:16:3e:34:bd:f9 |
+ci-info: |  eth0  |  True | fe80::216:3eff:fe34:bdf9/64 |       .       |  link  | 00:16:3e:34:bd:f9 |
+ci-info: |   lo   |  True |          127.0.0.1          |   255.0.0.0   |  host  |         .         |
+ci-info: |   lo   |  True |           ::1/128           |       .       |  host  |         .         |
+ci-info: | tunl0  | False |              .              |       .       |   .    |         .         |
+ci-info: +--------+-------+-----------------------------+---------------+--------+-------------------+
+ci-info: ++++++++++++++++++++++++++++++Route IPv4 info++++++++++++++++++++++++++++++
+ci-info: +-------+-------------+-------------+-----------------+-----------+-------+
+ci-info: | Route | Destination |   Gateway   |     Genmask     | Interface | Flags |
+ci-info: +-------+-------------+-------------+-----------------+-----------+-------+
+ci-info: |   0   |   0.0.0.0   | 10.35.212.1 |     0.0.0.0     |    eth0   |   UG  |
+ci-info: |   1   | 10.35.212.0 |   0.0.0.0   |  255.255.255.0  |    eth0   |   U   |
+ci-info: |   2   | 10.35.212.1 |   0.0.0.0   | 255.255.255.255 |    eth0   |   UH  |
+ci-info: +-------+-------------+-------------+-----------------+-----------+-------+
+ci-info: +++++++++++++++++++Route IPv6 info+++++++++++++++++++
+ci-info: +-------+-------------+---------+-----------+-------+
+ci-info: | Route | Destination | Gateway | Interface | Flags |
+ci-info: +-------+-------------+---------+-----------+-------+
+ci-info: |   0   |  fe80::/64  |    ::   |    eth0   |   U   |
+ci-info: |   2   |    local    |    ::   |    eth0   |   U   |
+ci-info: |   3   |  multicast  |    ::   |    eth0   |   U   |
+ci-info: +-------+-------------+---------+-----------+-------+
+Cloud-init v. 23.2.2-0ubuntu0~22.04.1 running 'modules:config' at Wed, 16 Aug 2023 18:37:57 +0000. Up 70.19 seconds.
+Cloud-init v. 23.2.2-0ubuntu0~22.04.1 running 'modules:final' at Wed, 16 Aug 2023 18:37:58 +0000. Up 71.21 seconds.
++ install -D -m 644 /dev/null /var/lib/juju/nonce.txt
++ echo user-admin:bootstrap
+Cloud-init v. 23.2.2-0ubuntu0~22.04.1 finished at Wed, 16 Aug 2023 18:37:58 +0000. Datasource DataSourceLXD.  Up 71.46 seconds
+Logging to /var/log/cloud-init-output.log on the bootstrap machine
+Regenerating SSH host keys
+Generating public/private rsa key pair.
+Your identification has been saved in /etc/ssh/ssh_host_rsa_key
+Your public key has been saved in /etc/ssh/ssh_host_rsa_key.pub
+The key fingerprint is:
+SHA256:ji008X4SS1/y8TcoFuxjSNENyFp3ktJoMC3LZczx5Qs root@juju-f7ba4a-0
+The key's randomart image is:
++---[RSA 3072]----+
+|       o*.=...   |
+|       ..&o==.   |
+|      o O.oEoo   |
+|       *  o . .  |
+|      o S..oo.   |
+|     . B.+o+.o.  |
+|      o *.o*.....|
+|       . oo o  ..|
+|                 |
++----[SHA256]-----+
+Generating public/private ecdsa key pair.
+Your identification has been saved in /etc/ssh/ssh_host_ecdsa_key
+Your public key has been saved in /etc/ssh/ssh_host_ecdsa_key.pub
+The key fingerprint is:
+SHA256:bYprt4dbFej1S73AyYdQQKwoTfbotmn37hcqXjlejiE root@juju-f7ba4a-0
+The key's randomart image is:
++---[ECDSA 256]---+
+|          oo..   |
+|       o   o.    |
+|      + + o.o    |
+|     . + = .+oo. |
+|      o S + .*o..|
+|       + o ..oo..|
+|      o +E.=..o. |
+|      .=o+=.*.   |
+|     .o.===*..   |
++----[SHA256]-----+
+Generating public/private ed25519 key pair.
+Your identification has been saved in /etc/ssh/ssh_host_ed25519_key
+Your public key has been saved in /etc/ssh/ssh_host_ed25519_key.pub
+The key fingerprint is:
+SHA256:opERyUSo8fDx1w4gOG5u03Nru9IA7b5abrrX57b1U+o root@juju-f7ba4a-0
+The key's randomart image is:
++--[ED25519 256]--+
+| . =+.           |
+|= + +.           |
+|.B.+.. .         |
+|.+o..oo .        |
+|o + o..oS        |
+| + = + ..    .   |
+|. o.B .  .  o    |
+|  o= = o. .o     |
+| +*o+o*o. .E.    |
++----[SHA256]-----+
+Running apt-get update
+Ign:1 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Ign:2 http://archive.ubuntu.com/ubuntu jammy InRelease
+Ign:3 http://archive.ubuntu.com/ubuntu jammy-updates InRelease
+Ign:4 http://archive.ubuntu.com/ubuntu jammy-backports InRelease
+Ign:1 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Ign:2 http://archive.ubuntu.com/ubuntu jammy InRelease
+Ign:3 http://archive.ubuntu.com/ubuntu jammy-updates InRelease
+Ign:4 http://archive.ubuntu.com/ubuntu jammy-backports InRelease
+Ign:1 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Ign:2 http://archive.ubuntu.com/ubuntu jammy InRelease
+Ign:3 http://archive.ubuntu.com/ubuntu jammy-updates InRelease
+Ign:4 http://archive.ubuntu.com/ubuntu jammy-backports InRelease
+Err:1 http://security.ubuntu.com/ubuntu jammy-security InRelease
+  Cannot initiate the connection to security.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to security.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to security.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to security.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Could not connect to security.ubuntu.com:80 (91.189.91.39), connection timed out Could not connect to security.ubuntu.com:80 (91.189.91.38), connection timed out Could not connect to security.ubuntu.com:80 (185.125.190.36), connection timed out Could not connect to security.ubuntu.com:80 (185.125.190.39), connection timed out
+Err:2 http://archive.ubuntu.com/ubuntu jammy InRelease
+  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Could not connect to archive.ubuntu.com:80 (185.125.190.36), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.83), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.81), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.82), connection timed out Could not connect to archive.ubuntu.com:80 (185.125.190.39), connection timed out
+Err:3 http://archive.ubuntu.com/ubuntu jammy-updates InRelease
+  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable)
+Err:4 http://archive.ubuntu.com/ubuntu jammy-backports InRelease
+  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable)
+Reading package lists...
+W: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/jammy/InRelease  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Could not connect to archive.ubuntu.com:80 (185.125.190.36), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.83), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.81), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.82), connection timed out Could not connect to archive.ubuntu.com:80 (185.125.190.39), connection timed out
+W: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/jammy-updates/InRelease  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable)
+W: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/jammy-backports/InRelease  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable)
+W: Failed to fetch http://security.ubuntu.com/ubuntu/dists/jammy-security/InRelease  Cannot initiate the connection to security.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to security.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to security.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to security.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Could not connect to security.ubuntu.com:80 (91.189.91.39), connection timed out Could not connect to security.ubuntu.com:80 (91.189.91.38), connection timed out Could not connect to security.ubuntu.com:80 (185.125.190.36), connection timed out Could not connect to security.ubuntu.com:80 (185.125.190.39), connection timed out
+W: Some index files failed to download. They have been ignored, or old ones used instead.
+Running apt-get upgrade
+cloud-init set on hold.
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Calculating upgrade...
+The following package was automatically installed and is no longer required:
+  libfreetype6
+Use 'sudo apt autoremove' to remove it.
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+Canceled hold on cloud-init.
+Installing curl, cpu-checker, tmux, ubuntu-fan
+Reading package lists...
+Building dependency tree...
+Reading state information...
+curl is already the newest version (7.81.0-1ubuntu1.13).
+curl set to manually installed.
+The following package was automatically installed and is no longer required:
+  libfreetype6
+Use 'sudo apt autoremove' to remove it.
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following package was automatically installed and is no longer required:
+  libfreetype6
+Use 'sudo apt autoremove' to remove it.
+The following additional packages will be installed:
+  msr-tools
+The following NEW packages will be installed:
+  cpu-checker msr-tools
+0 upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
+Need to get 17.1 kB of archives.
+After this operation, 67.6 kB of additional disk space will be used.
+Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+Ign:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+Ign:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+Ign:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+Err:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Could not connect to archive.ubuntu.com:80 (185.125.190.39), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.82), connection timed out Could not connect to archive.ubuntu.com:80 (185.125.190.36), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.81), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.83), connection timed out
+Err:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable)
+E: Failed to fetch http://archive.ubuntu.com/ubuntu/pool/main/m/msr-tools/msr-tools_1.3-4_amd64.deb  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Could not connect to archive.ubuntu.com:80 (185.125.190.39), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.82), connection timed out Could not connect to archive.ubuntu.com:80 (185.125.190.36), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.81), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.83), connection timed out
+E: Failed to fetch http://archive.ubuntu.com/ubuntu/pool/main/c/cpu-checker/cpu-checker_0.7-1.3build1_amd64.deb  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable)
+E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following package was automatically installed and is no longer required:
+  libfreetype6
+Use 'sudo apt autoremove' to remove it.
+The following additional packages will be installed:
+  msr-tools
+The following NEW packages will be installed:
+  cpu-checker msr-tools
+0 upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
+Need to get 17.1 kB of archives.
+After this operation, 67.6 kB of additional disk space will be used.
+Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+Ign:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+Ign:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+Ign:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+Err:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Could not connect to archive.ubuntu.com:80 (185.125.190.39), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.82), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.81), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.83), connection timed out Could not connect to archive.ubuntu.com:80 (185.125.190.36), connection timed out
+Err:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable)
+E: Failed to fetch http://archive.ubuntu.com/ubuntu/pool/main/m/msr-tools/msr-tools_1.3-4_amd64.deb  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Could not connect to archive.ubuntu.com:80 (185.125.190.39), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.82), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.81), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.83), connection timed out Could not connect to archive.ubuntu.com:80 (185.125.190.36), connection timed out
+E: Failed to fetch http://archive.ubuntu.com/ubuntu/pool/main/c/cpu-checker/cpu-checker_0.7-1.3build1_amd64.deb  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable)
+E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following package was automatically installed and is no longer required:
+  libfreetype6
+Use 'sudo apt autoremove' to remove it.
+The following additional packages will be installed:
+  msr-tools
+The following NEW packages will be installed:
+  cpu-checker msr-tools
+0 upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
+Need to get 17.1 kB of archives.
+After this operation, 67.6 kB of additional disk space will be used.
+Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+Ign:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+Ign:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+Ign:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+Err:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+  Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Could not connect to archive.ubuntu.com:80 (91.189.91.81), connection timed out Could not connect to archive.ubuntu.com:80 (185.125.190.39), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.83), connection timed out Could not connect to archive.ubuntu.com:80 (185.125.190.36), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.82), connection timed out
+Err:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+  Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable)
+E: Failed to fetch http://archive.ubuntu.com/ubuntu/pool/main/m/msr-tools/msr-tools_1.3-4_amd64.deb  Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Could not connect to archive.ubuntu.com:80 (91.189.91.81), connection timed out Could not connect to archive.ubuntu.com:80 (185.125.190.39), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.83), connection timed out Could not connect to archive.ubuntu.com:80 (185.125.190.36), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.82), connection timed out
+E: Failed to fetch http://archive.ubuntu.com/ubuntu/pool/main/c/cpu-checker/cpu-checker_0.7-1.3build1_amd64.deb  Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable)
+E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following package was automatically installed and is no longer required:
+  libfreetype6
+Use 'sudo apt autoremove' to remove it.
+The following additional packages will be installed:
+  msr-tools
+The following NEW packages will be installed:
+  cpu-checker msr-tools
+0 upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
+Need to get 17.1 kB of archives.
+After this operation, 67.6 kB of additional disk space will be used.
+Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+Ign:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+Ign:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+Ign:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+Err:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Could not connect to archive.ubuntu.com:80 (185.125.190.36), connection timed out Could not connect to archive.ubuntu.com:80 (185.125.190.39), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.81), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.83), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.82), connection timed out
+Err:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable)
+E: Failed to fetch http://archive.ubuntu.com/ubuntu/pool/main/m/msr-tools/msr-tools_1.3-4_amd64.deb  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Could not connect to archive.ubuntu.com:80 (185.125.190.36), connection timed out Could not connect to archive.ubuntu.com:80 (185.125.190.39), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.81), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.83), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.82), connection timed out
+E: Failed to fetch http://archive.ubuntu.com/ubuntu/pool/main/c/cpu-checker/cpu-checker_0.7-1.3build1_amd64.deb  Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable)
+E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following package was automatically installed and is no longer required:
+  libfreetype6
+Use 'sudo apt autoremove' to remove it.
+The following additional packages will be installed:
+  msr-tools
+The following NEW packages will be installed:
+  cpu-checker msr-tools
+0 upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
+Need to get 17.1 kB of archives.
+After this operation, 67.6 kB of additional disk space will be used.
+Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+Ign:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+Ign:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+Ign:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+Err:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 msr-tools amd64 1.3-4
+  Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Could not connect to archive.ubuntu.com:80 (185.125.190.36), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.83), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.81), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.82), connection timed out Could not connect to archive.ubuntu.com:80 (185.125.190.39), connection timed out
+Err:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpu-checker amd64 0.7-1.3build1
+  Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable)
+E: Failed to fetch http://archive.ubuntu.com/ubuntu/pool/main/m/msr-tools/msr-tools_1.3-4_amd64.deb  Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable) Could not connect to archive.ubuntu.com:80 (185.125.190.36), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.83), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.81), connection timed out Could not connect to archive.ubuntu.com:80 (91.189.91.82), connection timed out Could not connect to archive.ubuntu.com:80 (185.125.190.39), connection timed out
+E: Failed to fetch http://archive.ubuntu.com/ubuntu/pool/main/c/cpu-checker/cpu-checker_0.7-1.3build1_amd64.deb  Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::15). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::103). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::19). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::101). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2001:67c:1562::18). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4000:1::16). - connect (101: Network is unreachable) Cannot initiate the connection to archive.ubuntu.com:80 (2620:2d:4002:1::102). - connect (101: Network is unreachable)
+E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+ERROR failed to bootstrap model: subprocess encountered error code 100
+```
