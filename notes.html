@@ -139,7 +139,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#kata-containers" id="toc-kata-containers" class="nav-link active" data-scroll-target="#kata-containers">Kata Containers</a></li>
+  <li><a href="#kata-containers" id="toc-kata-containers" class="nav-link active" data-scroll-target="#kata-containers">Kata Containers</a>
+  <ul class="collapse">
+  <li><a href="#kata-deploy" id="toc-kata-deploy" class="nav-link" data-scroll-target="#kata-deploy">Kata-deploy</a></li>
+  <li><a href="#juju" id="toc-juju" class="nav-link" data-scroll-target="#juju">Juju</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -170,6 +174,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>According to a related doc <a href="https://github.com/kata-containers/kata-containers/blob/main/docs/install/README.md#packaged-installation-methods">packaged install methods</a>, kata-deploy is more for testing, and users are recommended to use the distro packages, as they have automatic updates. However, the only distro packages available are for Centos, and Fedora. 34.</p>
 <p>Some guides for ubuntu, like <a href="https://jafar390.medium.com/install-kata-containers-on-linux-with-docker-container-manager-28551ec8c034">this one</a> ask to you add a <a href="http://download.opensuse.org/repositories/home:/katacontainers:/">repository</a>, but that repository is unmaintaned and has not been updated since 2019.</p>
 <p>There is also an unmaintained snap package.</p>
+<section id="kata-deploy" class="level2">
+<h2 class="anchored" data-anchor-id="kata-deploy">Kata-deploy</h2>
+<p>Follow instructions here:</p>
+<p><a href="https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#k3s-cluster" class="uri">https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#k3s-cluster</a></p>
+<p>And to test: <a href="https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#run-a-sample-workload" class="uri">https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#run-a-sample-workload</a></p>
+<p>It sits at pending forever, but I think that’s because I have juju trying to deploy at the same time, so the system is running out of resources.</p>
+</section>
+<section id="juju" class="level2">
+<h2 class="anchored" data-anchor-id="juju">Juju</h2>
 <p>Another possibility is to use juju. Juju can add an externally managed kubernetes cluster, using the <a href="https://juju.is/docs/juju/juju-add-k8s">add-k8s</a> command. (juju list-models will show where you can deploy to, and show-model gives more info.)</p>
 <p>Then, you can use the juju operator to deploy the <a href="https://charmhub.io/kata">kata charm</a></p>
 <p>Then, you should be able to upgrade the juju charm using <a href="https://juju.is/docs/juju/manage-applications#heading--upgrade-a-charmhub-charm">juju refresh</a></p>
@@ -254,8 +267,89 @@ juju add-credential k3s</code></pre>
 <div class="sourceCode" id="cb19"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>moonpie@ubuntu:~/.kube$ juju add-model test k3s</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>ERROR failed to open kubernetes client: unable to determine legacy status for namespace "test": the server has asked for the client to provide credentials (get namespaces test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>But it seems I can get correct credentials from the rancher kubeconfig file.</p>
+<p>Okay, juju does not add k3s by default, that was me. Here’s what I got so far:</p>
+<p><code>juju bootstrap localhost</code></p>
+<p>Download rancher kubectl file and put them in .kube/config (default ish)</p>
+<p><code>KUBECONFIG=config juju add-k8s myk8scloud --cluster-name=mycluster</code> # Here, teh cluster name should be the same as what <code>KUBECONFIG=config kubectl get namespaces</code> gives you.</p>
+<p>Select both controller and client.</p>
+<p><code>juju add-credential mycluster</code></p>
+<p>Select oauth2. The token can be gotten from the kubeconfig file that rancher gave us.</p>
+<p><code>juju add-cloud mycluster -c localhost-localhost</code></p>
+<p>This adds your cloud “mycluster” to your controller localhost. Yeah, it gets prety confusing.</p>
+<p><code>juju add-model k3s mycluster --controller localhost-localhost --credential mycluster</code></p>
+<p>It gets even worse.</p>
+<p>But here is where I error:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>juju deploy kata mycluster</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>Located charm "kata" in charm-hub, revision 38</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>Deploying "mycluster" from charm-hub charm "kata", revision 38 in channel stable on ubuntu@22.04/stable</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>ERROR deploying this Kubernetes application requires a suitable storage class.</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>None have been configured. Set the operator-storage model config to specify which storage class should be used to allocate operator storage.</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>See https://discourse.charmhub.io/t/getting-started/152.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>It complains about not having storage. So I went into the rancher UI, and created a storage class:</p>
+<p><img src="images/katastorageclass.jpg" class="img-fluid"></p>
+<p>But it still complains. However, I feel closer than before.</p>
+<p>Hmm, according to <a href="https://discourse.charmhub.io/t/juju-operator-storage/197">some docs</a> juju will search for a default with certain labels.</p>
+<p>Unluckily for me, the label syntax is unclear, so I went with annotations instead. Rancher lets you configure the kubernetes default storage class, and it shows up when you view the yaml from the ui:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode yml code-with-copy"><code class="sourceCode yaml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">allowVolumeExpansion</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> storage.k8s.io/v1</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> StorageClass</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">annotations</span><span class="kw">:</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">storageclass.beta.kubernetes.io/is-default-class</span><span class="kw">:</span><span class="at"> </span><span class="st">'true'</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">storageclass.kubernetes.io/is-default-class</span><span class="kw">:</span><span class="at"> </span><span class="st">'true'</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">creationTimestamp</span><span class="kw">:</span><span class="at"> </span><span class="st">'2023-08-17T18:11:30Z'</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">managedFields</span><span class="kw">:</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> storage.k8s.io/v1</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">fieldsType</span><span class="kw">:</span><span class="at"> FieldsV1</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">fieldsV1</span><span class="kw">:</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="at">        f</span><span class="fu">:allowVolumeExpansion</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="at">        f</span><span class="fu">:parameters</span><span class="kw">:</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">.</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="at">          f</span><span class="fu">:numberOfReplicas</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="at">          f</span><span class="fu">:staleReplicaTimeout</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="at">        f</span><span class="fu">:provisioner</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="at">        f</span><span class="fu">:reclaimPolicy</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="at">        f</span><span class="fu">:volumeBindingMode</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">manager</span><span class="kw">:</span><span class="at"> agent</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">operation</span><span class="kw">:</span><span class="at"> Update</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">time</span><span class="kw">:</span><span class="at"> </span><span class="st">'2023-08-17T18:11:30Z'</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> storage.k8s.io/v1</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">fieldsType</span><span class="kw">:</span><span class="at"> FieldsV1</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">fieldsV1</span><span class="kw">:</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a><span class="at">        f</span><span class="fu">:metadata</span><span class="kw">:</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a><span class="at">          f</span><span class="fu">:annotations</span><span class="kw">:</span></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">.</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a><span class="at">            f</span><span class="fu">:storageclass.beta.kubernetes.io/is-default-class</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a><span class="at">            f</span><span class="fu">:storageclass.kubernetes.io/is-default-class</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">manager</span><span class="kw">:</span><span class="at"> Mozilla</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">operation</span><span class="kw">:</span><span class="at"> Update</span></span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">time</span><span class="kw">:</span><span class="at"> </span><span class="st">'2023-08-17T18:11:37Z'</span></span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> kata</span></span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">resourceVersion</span><span class="kw">:</span><span class="at"> </span><span class="st">'10792'</span></span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">uid</span><span class="kw">:</span><span class="at"> 0557689a-4ac0-46bf-8436-7cd0a87492c5</span></span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a><span class="fu">parameters</span><span class="kw">:</span></span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">numberOfReplicas</span><span class="kw">:</span><span class="at"> </span><span class="st">'3'</span></span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">staleReplicaTimeout</span><span class="kw">:</span><span class="at"> </span><span class="st">'2880'</span></span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a><span class="fu">provisioner</span><span class="kw">:</span><span class="at"> driver.longhorn.io</span></span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a><span class="fu">reclaimPolicy</span><span class="kw">:</span><span class="at"> Delete</span></span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a><span class="fu">volumeBindingMode</span><span class="kw">:</span><span class="at"> Immediate</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>However, despite this annotation, juju won’t actually deploy, it still gives the same error.</p>
+<p>I also tried to use <code>juju create-storage-pool juju-storage -m k3s</code>, which gave no output, until the second run:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>moonpie@ubuntu:~/.kube$ juju create-storage-pool juju-storage -m k3s</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>ERROR creating pool "juju-storage": cannot overwrite existing settings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So it obviously did something, however, I cannot see any storage pools created from the rancher UI. In addition to that, I get the same error when attempting to deploy kata-containers.</p>
+<p>I also tried setting, the label, but I still get the same error.</p>
+<p>Okay, so now it claims to have worked:</p>
+<p><code>juju model-config operator-storage=kata</code> # I believe this is the storage class name name</p>
+<p>Although <code>juju deploy kata mycluster</code> claims to have worked as well.</p>
+<p>However, the rancher UI shows an error for both operator pods:</p>
+<p><code>[Unschedulable] 0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1 nodes are available: 1 No preemption victims found for incoming pod..</code></p>
+<p>A <a href="https://www.scmgalaxy.com/tutorials/kubernetes-error-1-no-preemption-victims-found-for-incoming-pod/">quick google</a> says that the latter error is a resource issue.</p>
+<p>The first error is <a href="https://stackoverflow.com/questions/52668938/pod-has-unbound-persistentvolumeclaims">something about persistent volumes</a></p>
+<p>Anyway, based on this testing, it looks like I don’t need to create a model, and I can get away with just deploying directly to a cluster after I add it, as long as I have a controller set up.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
