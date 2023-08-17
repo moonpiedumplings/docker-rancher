@@ -180,6 +180,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><a href="https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#k3s-cluster" class="uri">https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#k3s-cluster</a></p>
 <p>And to test: <a href="https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#run-a-sample-workload" class="uri">https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#run-a-sample-workload</a></p>
 <p>It sits at pending forever, but I think that’s because I have juju trying to deploy at the same time, so the system is running out of resources.</p>
+<p>I created recreated my whole system, and now I get a different error with the sample kata file, from the rancher ui:</p>
+<p><code>0/1 nodes are available: 1 node(s) didn't match Pod's node affinity/selector. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling..</code></p>
+<p>Likely, for whatever reason, the kata runtime isn’t actaully being added. Or, this could be a resources issue. After I attempted to run this, my laptop began freezing up, a lot.</p>
 </section>
 <section id="juju" class="level2">
 <h2 class="anchored" data-anchor-id="juju">Juju</h2>

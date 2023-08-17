@@ -53,7 +53,7 @@
     "href": "notes.html#kata-deploy",
     "title": "Rancher-Ops Notes",
     "section": "Kata-deploy",
-    "text": "Kata-deploy\nFollow instructions here:\nhttps://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#k3s-cluster\nAnd to test: https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#run-a-sample-workload\nIt sits at pending forever, but I think that’s because I have juju trying to deploy at the same time, so the system is running out of resources."
+    "text": "Kata-deploy\nFollow instructions here:\nhttps://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#k3s-cluster\nAnd to test: https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#run-a-sample-workload\nIt sits at pending forever, but I think that’s because I have juju trying to deploy at the same time, so the system is running out of resources.\nI created recreated my whole system, and now I get a different error with the sample kata file, from the rancher ui:\n0/1 nodes are available: 1 node(s) didn't match Pod's node affinity/selector. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling..\nLikely, for whatever reason, the kata runtime isn’t actaully being added. Or, this could be a resources issue. After I attempted to run this, my laptop began freezing up, a lot."
   },
   {
     "objectID": "notes.html#juju",
