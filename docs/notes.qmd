@@ -28,6 +28,12 @@ And to test: <https://github.com/kata-containers/kata-containers/blob/main/tools
 
 It sits at pending forever, but I think that's because I have juju trying to deploy at the same time, so the system is running out of resources. 
 
+I created recreated my whole system, and now I get a different error with the sample kata file, from the rancher ui:
+
+`0/1 nodes are available: 1 node(s) didn't match Pod's node affinity/selector. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling..`
+
+
+Likely, for whatever reason, the kata runtime isn't actaully being added. Or, this could be a resources issue. After I attempted to run this, my laptop began freezing up, a lot. 
 
 
 ## Juju
