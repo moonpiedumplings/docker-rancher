@@ -35,6 +35,37 @@ I created recreated my whole system, and now I get a different error with the sa
 
 Likely, for whatever reason, the kata runtime isn't actaully being added. Or, this could be a resources issue. After I attempted to run this, my laptop began freezing up, a lot. 
 
+I found [an article](https://blog.cloudkernels.net/posts/kata-fc-k3s-k8s/) which discusses adding kata to k3s, and it's mostly the same, except I notice one difference:
+
+`k3s kubectl` vs just `kubectl`. I didn't know that k3s has certain commands builtin. Except not really, it seems that kubectl is also downloaded by k3s, but it's possible that this gets around the issue where by default, kubectl doesn't have permission to read k3s kubeconfig file. 
+
+Anyway, what's strange is that when I run the command to check if kata is isntalled, kuebctl reports it as installed:
+
+```{.default}
+moonpie@debian:/etc/containerd$ kubectl get nodes --show-labels
+NAME     STATUS   ROLES                              AGE   VERSION        LABELS
+debian   Ready    control-plane,etcd,master,worker   33m   v1.26.7+k3s1   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/instance-type=k3s,beta.kubernetes.io/os=linux,cattle.io/os=linux,katacontainers.io/kata-runtime=true,kubernetes.io/arch=amd64,kubernetes.io/hostname=debian,kubernetes.io/os=linux,node-role.kubernetes.io/control-plane=true,node-role.kubernetes.io/etcd=true,node-role.kubernetes.io/master=true,node-role.kubernetes.io/worker=true,node.kubernetes.io/instance-type=k3s,plan.upgrade.cattle.io/system-agent-upgrader=4d055e2e83d97dfacdf00e6527c5292be589576dcb9636cd39093e4e,rke.cattle.io/machine=46467e58-984f-4213-bb60-5d9afa06f59f
+```
+
+But the pod fails, and I can't understand why. 
+
+## Kata Manager
+
+Docs here: <https://github.com/kata-containers/kata-containers/blob/main/utils/README.md>
+
+`curl -fsSL https://raw.githubusercontent.com/kata-containers/kata-containers/main/utils/kata-manager.sh -o kata-manager.sh`
+
+`chmod +x kata-manager.sh`
+
+With the kata-manager tool, `-h` gives a help menu. Since I have k3s already installed, I will just install kata-manager with the 
+
+`kubectl apply -f https://raw.githubusercontent.com/kata-containers/kata-containers/main/tools/packaging/kata-deploy/runtimeclasses/kata-runtimeClasses.yaml`
+
+`kubectl apply -f https://raw.githubusercontent.com/kata-containers/kata-containers/main/tools/packaging/kata-deploy/examples/test-deploy-kata-qemu.yaml`
+
+Nope:  0/1 nodes are available: 1 node(s) didn't match Pod's node affinity/selector. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling...
+
+K3s doesn't appear to be configured to support kata. 
 
 ## Juju
 
