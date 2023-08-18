@@ -234,6 +234,8 @@ Select both controller and client.
 
 Select oauth2. The token can be gotten from the kubeconfig file that rancher gave us. 
 
+Later noted: This behavior is a [bug](https://bugs.launchpad.net/juju/+bug/1923385) [source 2](https://discourse.charmhub.io/t/using-juju-with-rancher-clusters/4444) (links to a fancier workaround). Juju is normally able to add kubernetes clusters straight from the kubecofig file without any messing around with credentials. 
+
 `juju add-cloud mycluster -c localhost-localhost`
 
 This adds your cloud "mycluster" to your controller localhost. Yeah, it gets prety confusing.
@@ -341,6 +343,18 @@ A [quick google](https://www.scmgalaxy.com/tutorials/kubernetes-error-1-no-preem
 The first error is [something about persistent volumes](https://stackoverflow.com/questions/52668938/pod-has-unbound-persistentvolumeclaims)
 
 Anyway, based on this testing, it looks like I don't need to create a model, and I can get away with just deploying directly to a cluster after I add it, as long as I have a controller set up. 
+
+
+Okay, I scaled down, not instaling calico, not installing many of the extra services like the Traefick ingress that rancher provides. 
+
+```{.default}
+moonpie@ubuntu:~$ juju add-relation kata kubernetes-worker
+ERROR juju: "add-relation" is not a juju command. See "juju --help".
+```
+
+Which is weird, since this is exactly what the [charmhub website](https://charmhub.io/kata) says to do. This means that those docs are outdated, but I can't find anything else. 
+
+It seems that juju 3.0 removed the relations feature in favor of integrations. 
 
 
 
