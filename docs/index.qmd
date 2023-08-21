@@ -140,7 +140,7 @@ To connect to a vcluster, use `vcluster connect clusternmae -n <optionalnamespac
 
 These steps for installing kata-containers were gotten from the kata docs, [here](https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#k3s-cluster), and [here](https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#run-a-sample-workload)
 
-Run this on a system where you have 
+You have to run the kubectl steps here only once for the whole cluster.
 
 ```{.default}
 git clone https://github.com/kata-containers/kata-containers.git
@@ -159,24 +159,27 @@ kubectl apply -f kata-rbac/base/kata-rbac.yaml
 kubectl apply -k kata-deploy/overlays/k3s
 ```
 
-
-```{.default}
+```{.default .code-overflow-wrap}
 kubectl apply -f https://raw.githubusercontent.com/kata-containers/kata-containers/main/tools/packaging/kata-deploy/runtimeclasses/kata-runtimeClasses.yaml
 ```
+
+However, you must restart k3s on each node, or maybe just reboot all the nodes at once in order to restart k3s so that k3s is able to see that the new container runtimes are available to it. 
 
 ```{.default}
 sudo k3s-killall.sh
 ```
 
+The k3s killall script is a special script provided by k3s that does more than just stop the systemd service, although starting the systemd service is all that's needed in order for k3s to restart. 
+
 ```{.default}
 sudo systemctl start k3s
 ```
 
-Now, kata containers should be up and working. To run a test pod, you can run a test pod from the [run a sample workload](https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#run-a-sample-workload) in the docs.
+Now, kata containers should be usable. To run a test pod, you can run a test pod from the [run a sample workload](https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#run-a-sample-workload) in the docs.
 
 For example, to run a test apache pod with the kata-qemu runtime:
 
-```{.default}
+```{.default .code-overflow-wrap}
 kubectl apply -f https://raw.githubusercontent.com/kata-containers/kata-containers/main/tools/packaging/kata-deploy/examples/test-deploy-kata-qemu.yaml
 ```
 
