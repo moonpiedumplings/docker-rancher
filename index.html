@@ -142,8 +142,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#installing-rancher" id="toc-installing-rancher" class="nav-link active" data-scroll-target="#installing-rancher">Installing Rancher</a></li>
   <li><a href="#k3s." id="toc-k3s." class="nav-link" data-scroll-target="#k3s.">K3s.</a></li>
   <li><a href="#networkmanager" id="toc-networkmanager" class="nav-link" data-scroll-target="#networkmanager">NetworkManager</a></li>
-  <li><a href="#installing-nvidia-container-runtime." id="toc-installing-nvidia-container-runtime." class="nav-link" data-scroll-target="#installing-nvidia-container-runtime.">Installing Nvidia container runtime.</a>
-  <ul class="collapse">
+  <li><a href="#installing-nvidia-container-runtime." id="toc-installing-nvidia-container-runtime." class="nav-link" data-scroll-target="#installing-nvidia-container-runtime.">Installing Nvidia container runtime.</a></li>
   <li><a href="#calico-networking" id="toc-calico-networking" class="nav-link" data-scroll-target="#calico-networking">Calico Networking</a>
   <ul class="collapse">
   <li><a href="#installing-k3s-without-flannel" id="toc-installing-k3s-without-flannel" class="nav-link" data-scroll-target="#installing-k3s-without-flannel">Installing K3s without flannel</a></li>
@@ -151,7 +150,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#setting-up-kubectl-to-work-without-sudo" id="toc-setting-up-kubectl-to-work-without-sudo" class="nav-link" data-scroll-target="#setting-up-kubectl-to-work-without-sudo">Setting up Kubectl to work without sudo</a></li>
   <li><a href="#vcluster" id="toc-vcluster" class="nav-link" data-scroll-target="#vcluster">Vcluster</a></li>
-  </ul></li>
   <li><a href="#kata-containers" id="toc-kata-containers" class="nav-link" data-scroll-target="#kata-containers">Kata Containers</a></li>
   </ul>
 </nav>
@@ -210,10 +208,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>[plugins."io.containerd.grpc.v1.cri".containerd.runtimes."nvidia".options]</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  BinaryName = "/usr/bin/nvidia-container-runtime"</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Of course, the fabricmanager service dies, complaining about not being able to find an nvidia gpu, but that make sense, because this virtual machine has no gpu.</p>
-<section id="calico-networking" class="level2">
-<h2 class="anchored" data-anchor-id="calico-networking">Calico Networking</h2>
-<section id="installing-k3s-without-flannel" class="level3">
-<h3 class="anchored" data-anchor-id="installing-k3s-without-flannel">Installing K3s without flannel</h3>
+</section>
+<section id="calico-networking" class="level1">
+<h1>Calico Networking</h1>
+<section id="installing-k3s-without-flannel" class="level2">
+<h2 class="anchored" data-anchor-id="installing-k3s-without-flannel">Installing K3s without flannel</h2>
 <p>Because vcluster needs calico networking, rather than the flannel that k3s offers by default, we need to make some changes to the installation process.</p>
 <p>In the UI for the installation, select agent environment variables, and set them like so:</p>
 <p><img src="images/agentvars.jpg" class="img-fluid"></p>
@@ -223,8 +222,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>These wil set the necessary environment variable for the k3 installer that prevent it from installing flannel.</p>
 <p>I also recommend adding the environment variables listed in the <a href="#setting-up-kubectl-to-work-without-sudo">setting up kubectl</a> section of this document.</p>
 </section>
-<section id="installing-calico-to-a-k3s-cluster" class="level3">
-<h3 class="anchored" data-anchor-id="installing-calico-to-a-k3s-cluster">Installing Calico to a k3s cluster</h3>
+<section id="installing-calico-to-a-k3s-cluster" class="level2">
+<h2 class="anchored" data-anchor-id="installing-calico-to-a-k3s-cluster">Installing Calico to a k3s cluster</h2>
 <p>The process is fairly simple, and the steps can be found <a href="https://docs.tigera.io/calico/latest/getting-started/kubernetes/k3s/multi-node-install#install-calico">on calico’s docs</a></p>
 <p>Ensure that you follow the manifest steps, the one with <code>kubectl apply</code>, because in my testing, using the operator steps will cause the cluster to perpetually hang on “waiting for cluster agent to connect” in rancher.</p>
 <p>The current command for this step is:</p>
@@ -237,8 +236,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>And now calico is installed and running. When everything is setup, rancher should be able to see the K3s cluster, and do management operations on it.</p>
 </section>
 </section>
-<section id="setting-up-kubectl-to-work-without-sudo" class="level2">
-<h2 class="anchored" data-anchor-id="setting-up-kubectl-to-work-without-sudo">Setting up Kubectl to work without sudo</h2>
+<section id="setting-up-kubectl-to-work-without-sudo" class="level1">
+<h1>Setting up Kubectl to work without sudo</h1>
 <p>While not strictly needed, using these agent environment variables:</p>
 <div class="columns">
 <div class="column" style="width:45%;">
@@ -249,13 +248,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Will enable kubecttl to run without needing sudo, if you are directly accessing one of the controller nodes on the cluster (k3s add kubectl and related tools to your path)</p>
 </section>
-<section id="vcluster" class="level2">
-<h2 class="anchored" data-anchor-id="vcluster">Vcluster</h2>
+<section id="vcluster" class="level1">
+<h1>Vcluster</h1>
 <p>To install vcluster on a system with kubectl configured and pointed at your specific cluster, simply follow the <a href="https://www.vcluster.com/docs/getting-started/setup">vcluster docs</a>.</p>
 <p>To create a vcluster, use <code>vcluster create clustername --connect=false</code>. This will prevent vcluster from creating and running a new proxy process which kubectl will try to connect to.</p>
 <p>To list vclusters, <code>vcluster list</code></p>
 <p>To connect to a vcluster, use <code>vcluster connect clusternmae -n &lt;optionalnamespace&gt; -- bash</code>. This creates a new bash shell with the kubectl context switched to that vcluster. <code>exit</code> to exit.</p>
-</section>
 </section>
 <section id="kata-containers" class="level1">
 <h1>Kata Containers</h1>
