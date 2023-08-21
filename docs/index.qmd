@@ -20,15 +20,43 @@ I can't get RKE2 clusters working, so I am going with K3 clusters instead. You c
 
 For our use case, we will be creating externally managed clusters:
 
-In the UI, create cluster > custom > and then change the kubernetes version from rke2 to k3s. 
+In the rancher UI, create cluster > custom > and then change the kubernetes version from rke2 to k3s. 
 
 If you want K3s to have nvidia container runtime support, follow the insutrctions in that section below. Nodes must be set up that way before k3s is installed on them.
 
-## NetworkManager
+# NetworkManager
 
-If your system is using networkmanager, like my virtual machines, were than,  you need to add some things to make sure that networkmanager does not get in the way of the k3s/rke2 managed interfaces:
+If your systems are using networkmanager, like my virtual machines are, then you need to add some things to make sure that networkmanager does not get in the way of the k3s/rke2 managed interfaces:
 
 <https://docs.rke2.io/known_issues#networkmanager>
+
+# Installing Nvidia container runtime.
+
+K3s have a feature where they [automatically detect and enable](https://docs.k3s.io/advanced#nvidia-container-runtime-support) Nvidia container runtime if it is installed, which makes things simple.
+
+
+Linked on the K3s website, is the [nvidia website](https://nvidia.github.io/libnvidia-container/), which then links to a guide to install the nvidia container runtime.
+
+I followed the guide from [docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#docker) to `sudo apt-get update`. 
+
+After that, I decided to follow the steps on the K3s page. 
+
+```{.default .code-overflow-wrap}
+apt install -y nvidia-container-runtime cuda-drivers-fabricmanager-535 nvidia-headless-535-server
+```
+
+Replace "535" with whatever version of the nvidia driver you want to install. 
+
+And sure enough, when I run the command recommended by the k3s to check if the nvidia container runtime installed, it is.
+
+```{.default}
+root@ubuntu:/var/lib/rancher/k3s/agent/etc/containerd# grep nvidia /var/lib/rancher/k3s/agent/etc/containerd/config.toml
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes."nvidia"]
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes."nvidia".options]
+  BinaryName = "/usr/bin/nvidia-container-runtime"
+```
+
+Of course, the fabricmanager service dies, complaining about not being able to find an nvidia gpu, but that make sense, because this virtual machine has no gpu.
 
 
 ## Calico Networking
@@ -52,7 +80,7 @@ INSTALL_K3S_EXEC
 
 These wil set the necessary environment variable for the k3 installer that prevent it from installing flannel.
 
-I also recommend adding the environment variables listed in the setting up kubectl section of this document. 
+I also recommend adding the environment variables listed in the [setting up kubectl](#setting-up-kubectl-to-work-without-sudo) section of this document. 
 
 ### Installing Calico to a k3s cluster
 
@@ -108,33 +136,51 @@ To list vclusters, `vcluster list`
 
 To connect to a vcluster, use `vcluster connect clusternmae -n <optionalnamespace> -- bash`. This creates a new bash shell with the kubectl context switched to that vcluster. `exit` to exit. 
 
-# Installing Nvidia container runtime.
+# Kata Containers
 
-K3s have a feature where they [automatically detect and enable](https://docs.k3s.io/advanced#nvidia-container-runtime-support) Nvidia container runtime if it is installed, which makes things simple.
+These steps for installing kata-containers were gotten from the kata docs, [here](https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#k3s-cluster), and [here](https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#run-a-sample-workload)
 
-
-Linked on the K3s website, is the [nvidia website](https://nvidia.github.io/libnvidia-container/), which then links to a guide to install the nvidia container runtime.
-
-I followed the guide from [docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#docker) to `sudo apt-get update`. 
-
-After that, I decided to follow the steps on the K3s page. 
-
-```{.default .code-overflow-wrap}
-apt install -y nvidia-container-runtime cuda-drivers-fabricmanager-535 nvidia-headless-535-server
-```
-
-Replace "535" with whatever version of the nvidia driver you want to install. 
-
-And sure enough, when I run the command recommended by the k3s to check if the nvidia container runtime installed, it is.
+Run this on a system where you have 
 
 ```{.default}
-root@ubuntu:/var/lib/rancher/k3s/agent/etc/containerd# grep nvidia /var/lib/rancher/k3s/agent/etc/containerd/config.toml
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes."nvidia"]
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes."nvidia".options]
-  BinaryName = "/usr/bin/nvidia-container-runtime"
+git clone https://github.com/kata-containers/kata-containers.git
 ```
 
-Of course, the fabricmanager service dies, complaining about not being able to find an nvidia gpu, but that make sense, because this virtual machine has no gpu.
+```{.default}
+cd kata-containers/tools/packaging/kata-deploy
+```
+
+```{.default}
+kubectl apply -f kata-rbac/base/kata-rbac.yaml
+```
+
+
+```{.default}
+kubectl apply -k kata-deploy/overlays/k3s
+```
+
+
+```{.default}
+kubectl apply -f https://raw.githubusercontent.com/kata-containers/kata-containers/main/tools/packaging/kata-deploy/runtimeclasses/kata-runtimeClasses.yaml
+```
+
+```{.default}
+sudo k3s-killall.sh
+```
+
+```{.default}
+sudo systemctl start k3s
+```
+
+Now, kata containers should be up and working. To run a test pod, you can run a test pod from the [run a sample workload](https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#run-a-sample-workload) in the docs.
+
+For example, to run a test apache pod with the kata-qemu runtime:
+
+```{.default}
+kubectl apply -f https://raw.githubusercontent.com/kata-containers/kata-containers/main/tools/packaging/kata-deploy/examples/test-deploy-kata-qemu.yaml
+```
+
+
 
 
 

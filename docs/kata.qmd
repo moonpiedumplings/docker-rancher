@@ -1,0 +1,33 @@
+```{.default}
+git clone https://github.com/kata-containers/kata-containers.git
+```
+
+```{.default}
+cd kata-containers/tools/packaging/kata-deploy
+```
+
+```{.default}
+kubectl apply -f kata-rbac/base/kata-rbac.yaml
+```
+
+
+```{.default}
+kubectl apply -k kata-deploy/overlays/k3s
+```
+
+
+```{.default}
+kubectl apply -f https://raw.githubusercontent.com/kata-containers/kata-containers/main/tools/packaging/kata-deploy/runtimeclasses/kata-runtimeClasses.yaml
+```
+
+```{.default}
+sudo k3s-killall.sh
+```
+
+Now, kata containers should be up and working. To run a test pod, you can run a test pod from the [run a sample workload](https://github.com/kata-containers/kata-containers/blob/main/tools/packaging/kata-deploy/README.md#run-a-sample-workload) in the docs.
+
+```{.default}
+kubectl apply -f https://raw.githubusercontent.com/kata-containers/kata-containers/main/tools/packaging/kata-deploy/examples/test-deploy-kata-qemu.yaml
+```
+
+

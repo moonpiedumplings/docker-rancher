@@ -49,6 +49,20 @@ debian   Ready    control-plane,etcd,master,worker   33m   v1.26.7+k3s1   beta.k
 
 But the pod fails, and I can't understand why. 
 
+Attempt 2 also failed, but this time with a different error. 
+
+`Failed to create pod sandbox: rpc error: code = Unknown desc = failed to get sandbox runtime: no runtime for "kata-qemu" is configured`
+
+Alright, I got it working. I needed to reboot the entire virtual machine, and then the pod started up just fine. I am going to do more tested, to see if I can get away with just restarting the k3s service, or maybe just the k3s service and the rancher system agent.
+
+Attempting to just restart the k3s service with `systemctl restart k3s` failed, givng me a different error "Deployment does not have minimum availability.", but this error also went away after rebooting my virtual machine.
+
+Okay, apparently just stopping the systemd service doesn't properly kill k3s, you have to run the script (with sudo) at /usr/local/bin/k3s-killall.sh, which is in path by default. Then, you can restart k3s with `sudo systemctl start k3s`.
+
+I ran it, and it gave me another error, something about pod preemption. Anyway, my laptop froze up a lot, the docker container that rancher was running in die, but after restarting the rancher docker container, I got to see that the pod was launched properly. It was probably a resource issue.
+
+
+
 ## Kata Manager
 
 Docs here: <https://github.com/kata-containers/kata-containers/blob/main/utils/README.md>
