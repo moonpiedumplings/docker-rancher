@@ -194,6 +194,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Attempt 2 also failed, but this time with a different error.</p>
 <p><code>Failed to create pod sandbox: rpc error: code = Unknown desc = failed to get sandbox runtime: no runtime for "kata-qemu" is configured</code></p>
 <p>Alright, I got it working. I needed to reboot the entire virtual machine, and then the pod started up just fine. I am going to do more tested, to see if I can get away with just restarting the k3s service, or maybe just the k3s service and the rancher system agent.</p>
+<p>Attempting to just restart the k3s service with <code>systemctl restart k3s</code> failed, givng me a different error “Deployment does not have minimum availability.”, but this error also went away after rebooting my virtual machine.</p>
+<p>Okay, apparently just stopping the systemd service doesn’t properly kill k3s, you have to run the script (with sudo) at /usr/local/bin/k3s-killall.sh, which is in path by default. Then, you can restart k3s with <code>sudo systemctl start k3s</code>.</p>
+<p>I ran it, and it gave me another error, something about pod preemption. Anyway, my laptop froze up a lot, the docker container that rancher was running in die, but after restarting the rancher docker container, I got to see that the pod was launched properly. It was probably a resource issue.</p>
 </section>
 <section id="kata-manager" class="level2">
 <h2 class="anchored" data-anchor-id="kata-manager">Kata Manager</h2>
