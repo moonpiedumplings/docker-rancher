@@ -59,9 +59,9 @@ root@ubuntu:/var/lib/rancher/k3s/agent/etc/containerd# grep nvidia /var/lib/ranc
 Of course, the fabricmanager service dies, complaining about not being able to find an nvidia gpu, but that make sense, because this virtual machine has no gpu.
 
 
-## Calico Networking
+# Calico Networking
 
-### Installing K3s without flannel
+## Installing K3s without flannel
 
 Because vcluster needs calico networking, rather than the flannel that k3s offers by default, we need to make some changes to the installation process. 
 
@@ -82,7 +82,7 @@ These wil set the necessary environment variable for the k3 installer that preve
 
 I also recommend adding the environment variables listed in the [setting up kubectl](#setting-up-kubectl-to-work-without-sudo) section of this document. 
 
-### Installing Calico to a k3s cluster
+## Installing Calico to a k3s cluster
 
 The process is fairly simple, and the steps can be found [on calico's docs](https://docs.tigera.io/calico/latest/getting-started/kubernetes/k3s/multi-node-install#install-calico)
 
@@ -103,7 +103,7 @@ And now calico is installed and running. When everything is setup, rancher shoul
 
 
 
-## Setting up Kubectl to work without sudo
+# Setting up Kubectl to work without sudo
 
 While not strictly needed, using these agent environment variables:
 
@@ -126,7 +126,7 @@ K3S_KUBECONFIG_MODE
 Will enable kubecttl to run without needing sudo, if you are directly accessing one of the controller nodes on the cluster (k3s add kubectl and related tools to your path)
 
 
-## Vcluster
+# Vcluster
 
 To install vcluster on a system with kubectl configured and pointed at your specific cluster, simply follow the [vcluster docs](https://www.vcluster.com/docs/getting-started/setup).
 
