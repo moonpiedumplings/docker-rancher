@@ -191,6 +191,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>NAME     STATUS   ROLES                              AGE   VERSION        LABELS</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>debian   Ready    control-plane,etcd,master,worker   33m   v1.26.7+k3s1   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/instance-type=k3s,beta.kubernetes.io/os=linux,cattle.io/os=linux,katacontainers.io/kata-runtime=true,kubernetes.io/arch=amd64,kubernetes.io/hostname=debian,kubernetes.io/os=linux,node-role.kubernetes.io/control-plane=true,node-role.kubernetes.io/etcd=true,node-role.kubernetes.io/master=true,node-role.kubernetes.io/worker=true,node.kubernetes.io/instance-type=k3s,plan.upgrade.cattle.io/system-agent-upgrader=4d055e2e83d97dfacdf00e6527c5292be589576dcb9636cd39093e4e,rke.cattle.io/machine=46467e58-984f-4213-bb60-5d9afa06f59f</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>But the pod fails, and I can’t understand why.</p>
+<p>Attempt 2 also failed, but this time with a different error.</p>
+<p><code>Failed to create pod sandbox: rpc error: code = Unknown desc = failed to get sandbox runtime: no runtime for "kata-qemu" is configured</code></p>
+<p>Alright, I got it working. I needed to reboot the entire virtual machine, and then the pod started up just fine. I am going to do more tested, to see if I can get away with just restarting the k3s service, or maybe just the k3s service and the rancher system agent.</p>
 </section>
 <section id="kata-manager" class="level2">
 <h2 class="anchored" data-anchor-id="kata-manager">Kata Manager</h2>
